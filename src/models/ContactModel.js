@@ -3,15 +3,15 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const ContactSchema = new Schema({
-    Name: String, 
-    Designation: String, 
-    Company: String, 
-    Industry: String,
-    Email: {type : String, unique:true, require: true},
-    PhoneNumber: Number,
-    Country: String,
-    user:{type: ObjectId, ref: "<Name of the mod/collection>"}     // NOT COMPLITED 
+    name: String, 
+    designation: String, 
+    company: String, 
+    industry: String,
+    email: {type : String, unique:true, require: true},
+    phoneNumber: Number,
+    country: String,
+    user:{type: ObjectId, ref: "users"}     // NOT COMPLETED 
   })
 
-const ContactModel = mongoose.model('<name of the collection for contsct >', ContactSchema );  // NOT COMPLITED 
+const ContactModel = mongoose.model('contacts', ContactSchema );  // NOT COMPLETED 
 module.exports = ContactModel ;
