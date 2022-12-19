@@ -2,18 +2,19 @@ const express = require('express')
 const mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 const app = express()
+require('dotenv/config');
 
 //import models
 const UserModel = require('./src/models/UserModel');
 const ContactModel = require('./src/models/ContactModel');
-//import Routs
+//import Routes
 const UserRoute = require('./src/routes/UserRoute');
 const ContactRoute = require('./src/routes/ContactRoute')
 
 //connection to database 
-mongoose.connect('mongodb+srv://10x-project-group-6:10x-project-group-6@contacts-manager.srkvjrw.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('database Connected!'))
-    .catch(() => console.log('Error!!! to connect the database'))
+    .catch((e) => console.log('Error!!! to connect the database'+e.message))
 // MIDLEWRE
 
 
@@ -24,7 +25,8 @@ app.use('/<path>',ContactRoute)
 //BAD REQUEST
 app.use('*',(req, res)=>{
   res.status(404).json({
-    status: '404! not found'
+    status: 'Failed',
+    message: '404! not found'
   })
 })
 
