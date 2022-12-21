@@ -21,18 +21,50 @@ router.post('/<path>',(req,res)=>{
 })
 let contactResponse
 router.post('/',uploads.single('file'), (req,res)=>{
-    req.userID="63a1f6c67fede683c41d1ee7"; //after login and JWT creation,delete this and get userID via JWT
     csv().fromFile(req.file.path).then((response)=>{
         for(let i=0;i<response.length;i++){
             response[i].user = req.userID
         }
         ContactModel.insertMany(response,(err,data)=>{
             if(err){
-                console.log(err)
+                res.status(400).json({
+                    status:"Failed",
+                    Error:err.name,
+                    message:err.message
+                })
             }else{
-                res.status(200).json(data)
+                res.status(200).json({
+                    status:"Success",
+                    message:data
+                })
             }
         })
     })
+})
+
+router.delete('/', async (req,res)=>{
+    console.log(req.body)
+    const {selectedContactsEmails} = req.body
+    if(selectedContactsEmails.length){
+        try{
+            let response = await ContactModel.deleteMany(selectedContactsEmails)
+            res.status(200).json({
+                status:"Success",
+                message: "Deleted Contacts"
+            })
+        }catch(e){
+            res.status(400).json({
+                status:"Failed",
+                message: e.message
+            })
+        }
+    }else{
+        res.status(400).json({
+            status:"Failed",
+            message: "No contacts selected"
+        })
+    }   
+    
+
 })
 module.exports = router;
