@@ -10,6 +10,7 @@ const ContactSchema = new Schema({
     email: {type : String, unique:true, require: true},
     phoneNumber: Number,
     country: String,
+    date: {type: Date, default:Date.now()},
     user:{type: ObjectId, ref: "users"}     // NOT COMPLETED 
   })
 

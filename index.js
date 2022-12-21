@@ -15,12 +15,11 @@ const ContactRoute = require('./src/routes/ContactRoute')
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('database Connected!'))
     .catch((e) => console.log('Error!!! to connect the database'+e.message))
-// MIDLEWRE
-
+// MIDDLEWARE
 
 //define route path
 app.use('/api/users',UserRoute)
-app.use('/<path>',ContactRoute)
+app.use('/api/contacts',ContactRoute)
 
 //BAD REQUEST
 app.use('*',(req, res)=>{
