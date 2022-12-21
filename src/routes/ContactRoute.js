@@ -16,9 +16,7 @@ const storage = multer.diskStorage({
 })
 const uploads = multer({storage: storage})
 
-router.post('/<path>',(req,res)=>{
 
-})
 let contactResponse
 router.post('/',uploads.single('file'), (req,res)=>{
     csv().fromFile(req.file.path).then((response)=>{
@@ -41,6 +39,46 @@ router.post('/',uploads.single('file'), (req,res)=>{
         })
     })
 })
+
+router.get('/',async (req,res)=>{
+    try {
+      // console.log(req.query)
+      const {PageNum ,filter } = req.query
+      const allcontact = await ContactModel.find().sort(filter).skip((11*(PageNum - 1))).limit(11); //0-11
+      // console.log(allcontact)
+      res.json({
+          status: 'susecess',  
+          allcontact
+      })
+    } catch (error) {
+      res.json({
+          status: 'failed',
+          messege: error.messege
+      })
+    }
+  })
+
+//get the search contact
+router.get('/search/:email',async (req,res)=>{
+    try {
+      const email = req.params.email
+      console.log(email)
+      const allcontact = await ContactModel.find({email})
+      res.json({
+          status: 'susecess',  
+          allcontact
+      })
+    } catch (error) {       
+      res.json({
+          status: 'failed',
+          messege: error.messege
+      })
+    }
+  })
+
+  //
+
+
 
 router.delete('/', async (req,res)=>{
     console.log(req.body)

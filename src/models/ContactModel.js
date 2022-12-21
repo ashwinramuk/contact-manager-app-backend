@@ -7,6 +7,7 @@ const ContactSchema = new Schema({
     designation: String, 
     company: String, 
     industry: String,
+
     email: {type : String, unique:true, require: true},
     phoneNumber: Number,
     country: String,
