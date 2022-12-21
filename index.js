@@ -27,7 +27,7 @@ const tokenVerification = (req,res,next)=>{
               return res.status(403).json({
                 status:"Failed",
                 Error:err.name,
-                message:err.message
+                message:err.name=="JsonWebTokenError"?"Not a valid Token. Pls login again":err.message
               })
             }
             req.userID = decoded.data;
@@ -42,7 +42,7 @@ const tokenVerification = (req,res,next)=>{
     }else{
       return res.status(403).json({
         status:"Failed",
-        message:"Authorization key and token value in header is missing"
+        message:"unauthorised access. Pls login before access"
       })
     }
 }
@@ -56,6 +56,13 @@ app.use('*',(req, res)=>{
   res.status(404).json({
     status: 'Failed',
     message: '404! not found'
+  })
+})
+//Welcome Page
+app.use("/",(req,res)=>{
+  res.status(200).json({
+    status:"Success",
+    message: "Welcome to contact-manager-app-backend-API. we service two APIs which are /api/users and /api/contacts"
   })
 })
 
