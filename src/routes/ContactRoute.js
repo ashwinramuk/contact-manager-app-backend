@@ -39,20 +39,18 @@ router.post('/',uploads.single('file'), (req,res)=>{
         })
     })
 })
-
 router.get('/',async (req,res)=>{
     try {
-      // console.log(req.query)
-      const {PageNum ,filter } = req.query
-      const allcontact = await ContactModel.find().sort(filter).skip((11*(PageNum - 1))).limit(11); //0-11
+      const {PageNum=1 ,filter='name' } = req.query
+      const allcontact = await ContactModel.find({user:req.userID}).sort(filter).skip((11*(PageNum - 1))).limit(11); //0-11
       // console.log(allcontact)
       res.json({
-          status: 'susecess',  
+          status: 'Success',  
           allcontact
       })
     } catch (error) {
       res.json({
-          status: 'failed',
+          status: 'Failed',
           messege: error.messege
       })
     }
@@ -62,15 +60,14 @@ router.get('/',async (req,res)=>{
 router.get('/search/:email',async (req,res)=>{
     try {
       const email = req.params.email
-      console.log(email)
       const allcontact = await ContactModel.find({email})
       res.json({
-          status: 'susecess',  
+          status: 'Success',  
           allcontact
       })
     } catch (error) {       
       res.json({
-          status: 'failed',
+          status: 'Failed',
           messege: error.messege
       })
     }
@@ -81,14 +78,15 @@ router.get('/search/:email',async (req,res)=>{
 
 
 router.delete('/', async (req,res)=>{
-    console.log(req.body)
+    // console.log(req.body)
     const {selectedContactsEmails} = req.body
     if(selectedContactsEmails.length){
         try{
-            let response = await ContactModel.deleteMany(selectedContactsEmails)
+            let response = await ContactModel.deleteMany({email:selectedContactsEmails})
             res.status(200).json({
                 status:"Success",
-                message: "Deleted Contacts"
+                message: "Deleted Contacts",
+                response
             })
         }catch(e){
             res.status(400).json({
