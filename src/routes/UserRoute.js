@@ -6,9 +6,6 @@ const app = express()
 const router = express.Router();
 const UserModel = require("../models/UserModel")
 
-
-router.use(express.json())
-
 router.post("/login", async (req, res) => {
     console.log(req.body)
     const { email, password } = req.body;
@@ -67,7 +64,8 @@ router.post('/register', async (req, res) => {
             }
             userData = await UserModel.create({
                 email: email,
-                password: hash
+                password: hash,
+                name: email.split("@")[0]
             });
             res.json({
                 status: "Success",
