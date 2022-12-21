@@ -23,7 +23,6 @@ const tokenVerification = (req,res,next)=>{
         const token = req.headers.authorization;
         if(token){
           jwt.verify(token,process.env.SECRET,(err,decoded)=>{
-            console.log("inside jwt")
             if(err){
               return res.status(403).json({
                 status:"Failed",
@@ -32,7 +31,6 @@ const tokenVerification = (req,res,next)=>{
               })
             }
             req.userID = decoded.data;
-            console.log(req.userID)
             next();
           })
         }else{

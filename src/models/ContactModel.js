@@ -8,9 +8,9 @@ const ContactSchema = new Schema({
     company: String, 
     industry: String,
 
-    email: {type : String, unique:true, require: true},
+    email: {type : String, required: true},
     phoneNumber: Number,
-    country: String,
+    country: String, 
     date: {type: Date, default:Date.now()},
     user:{type: ObjectId, ref: "users"}     // NOT COMPLETED 
   })
