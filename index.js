@@ -51,13 +51,6 @@ const tokenVerification = (req,res,next)=>{
 app.use('/api/users',UserRoute)
 app.use('/api/contacts',tokenVerification,ContactRoute)
 
-//BAD REQUEST
-app.use('*',(req, res)=>{
-  res.status(404).json({
-    status: 'Failed',
-    message: '404! not found'
-  })
-})
 //Welcome Page
 app.use("/",(req,res)=>{
   res.status(200).json({
@@ -65,5 +58,14 @@ app.use("/",(req,res)=>{
     message: "Welcome to contact-manager-app-backend-API. we service two APIs which are /api/users and /api/contacts"
   })
 })
+
+//BAD REQUEST
+app.use('*',(req, res)=>{
+  res.status(404).json({
+    status: 'Failed',
+    message: '404! not found'
+  })
+})
+
 
 app.listen(4000, () => console.log('server start at port 4000....'))
