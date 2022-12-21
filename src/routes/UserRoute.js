@@ -6,7 +6,7 @@ const { body, validationResult } = require('express-validator');
 const router = express.Router();
 const UserModel = require("../models/UserModel")
 
-router.post("/login",body('email').isEmail(), async (req, res) => {
+router.post("/login",body('email').isEmail(),body('password').notEmpty(), async (req, res) => {
     try{
         const errors = validationResult(req);
         if(!errors.isEmpty()){
@@ -21,7 +21,7 @@ router.post("/login",body('email').isEmail(), async (req, res) => {
             let result = await bcrypt.compare(password, userData.password);
             if (result) {
                 const token = jwt.sign({
-                    exp: Math.floor(Date.now() / 10) + 60 * 60,
+                    exp: Math.floor(Date.now() / 1000) + 60 * 60,
                     data: userData._id,
                 },
                     process.env.SECRET
@@ -57,7 +57,8 @@ router.post('/register',body('email').isEmail(),body('password').isLength({ min:
         if(!errors.isEmpty()){
             return res.status(400).json({
                 status:"Failed",
-                Error:errors.array()
+                Error:errors.array(),
+                message:errors.array().filter((e)=>e.value.length<6&&e.param=="password").length?"password length should be 6 to 16 chars":""
             })
         }
         const { email, password, confirmPassword } = req.body;
