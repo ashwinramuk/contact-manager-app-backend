@@ -19,7 +19,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 
 //define route path
-app.use('/<path>',UserRoute)
+app.use('/api/users',UserRoute)
 app.use('/<path>',ContactRoute)
 
 //BAD REQUEST

@@ -9,7 +9,7 @@ const UserSchema = new Schema({
     // NOT COMPLITED 
     userPicURL: String, //static one image	
     name: String, //	demo1	
-    AccessDesignation: {type :String , required: true}	//normal, Admin, superAdmin, 
+    AccessDesignation: {type :String }	//normal, Admin, superAdmin, 
   })
   const UserModel = mongoose.model('users', UserSchema ); // NOT COMPLITED 
   module.exports = UserModel;
