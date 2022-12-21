@@ -79,10 +79,10 @@ router.get('/search/:email',async (req,res)=>{
 
 router.delete('/', async (req,res)=>{
     // console.log(req.body)
-    const {selectedContactsEmails} = req.body
-    if(selectedContactsEmails.length){
+    const {selectedContactsIds} = req.body
+    if(selectedContactsIds.length){
         try{
-            let response = await ContactModel.deleteMany({email:selectedContactsEmails})
+            let response = await ContactModel.deleteMany({_id:selectedContactsIds})
             res.status(200).json({
                 status:"Success",
                 message: "Deleted Contacts",
