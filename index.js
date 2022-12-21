@@ -16,10 +16,42 @@ mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('database Connected!'))
     .catch((e) => console.log('Error!!! to connect the database'+e.message))
 // MIDDLEWARE
+app.use(express.json())
+app.use(express.urlencoded())
+const tokenVerification = (req,res,next)=>{
+    if(req.headers.authorization){
+        const token = req.headers.authorization;
+        if(token){
+          jwt.verify(token,process.env.SECRET,(err,decoded)=>{
+            console.log("inside jwt")
+            if(err){
+              return res.status(403).json({
+                status:"Failed",
+                Error:err.name,
+                message:err.message
+              })
+            }
+            req.userID = decoded.data;
+            console.log(req.userID)
+            next();
+          })
+        }else{
+          return res.status(403).json({
+            status:"Failed",
+            message:"Token is missing"
+          })
+        }
+    }else{
+      return res.status(403).json({
+        status:"Failed",
+        message:"Authorization key and token value in header is missing"
+      })
+    }
+}
 
 //define route path
 app.use('/api/users',UserRoute)
-app.use('/api/contacts',ContactRoute)
+app.use('/api/contacts',tokenVerification,ContactRoute)
 
 //BAD REQUEST
 app.use('*',(req, res)=>{
