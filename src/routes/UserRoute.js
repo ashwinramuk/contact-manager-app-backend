@@ -52,7 +52,7 @@ router.post('/create', async (req, res) => {
                 message: "User already exists with the given email"
             })
         }
-
+        console.log(password,confirmPassword)
         if (password !== confirmPassword) {
             return res.status(400).send('Passwords are not matching');
         }
