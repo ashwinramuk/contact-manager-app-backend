@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
+const cors = require('cors')
 const app = express()
 require('dotenv/config');
 
@@ -18,6 +19,7 @@ mongoose.connect(process.env.MONGO_URL)
 // MIDDLEWARE
 app.use(express.json())
 app.use(express.urlencoded())
+app.use(cors())
 const tokenVerification = (req,res,next)=>{
     if(req.headers.authorization){
         const token = req.headers.authorization;
