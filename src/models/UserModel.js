@@ -7,9 +7,9 @@ const UserSchema = new Schema({
     password: {type : String, required: true},
 
     // NOT COMPLITED 
-    userPicURL: String, //static one image	
+    userPicURL: {type:String, default:"https://st.depositphotos.com/1052233/2885/v/600/depositphotos_28850541-stock-illustration-male-default-profile-picture.jpg"}, //static one image	
     name: String, //	demo1	
-    AccessDesignation: {type :String }	//normal, Admin, superAdmin, 
+    accessDesignation: {type :String, default:"normal" }	//normal, Admin, superAdmin, 
   })
   const UserModel = mongoose.model('users', UserSchema ); // NOT COMPLITED 
   module.exports = UserModel;
