@@ -1,20 +1,27 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
-const app = express()
-const { body, validationResult } = require('express-validator');
+// const app = express()
+const { body } = require('express-validator');
 const router = express.Router();
-const UserModel = require("../models/UserModel")
+const UserModel = require("../models/UserModel");
+// const bodyParser = require('body-parser');
+// router.use(bodyParser)
+var bodyParser = require('body-parser')
+router.use(bodyParser.json())
 
 router.post("/login",body('email').isEmail(),body('password').notEmpty(), async (req, res) => {
+    console.log("from login route")
     try{
-        const errors = validationResult(req);
-        if(!errors.isEmpty()){
-            return res.status(400).json({
-                status:"Failed",
-                Error:errors.array()
-            })
-        }
+        // const errors = validationResult(req);
+        // if(!errors.isEmpty()){
+        //     return res.status(400).json({
+        //         status:"Failed",
+        //         Error:errors.array()
+        //     })
+        // }
+        // console.log(req)
+        console.log(req.body)
         const { email, password } = req.body;
         const userData = await UserModel.findOne({ email });
         if (userData) {
@@ -33,7 +40,7 @@ router.post("/login",body('email').isEmail(),body('password').notEmpty(), async 
                 });
             } else {
                 res.status(400).json({
-                    status: "Failed",
+                    status: "Password not matched",
                     message: "Wrong Password",
                 });
             }
@@ -53,19 +60,20 @@ router.post("/login",body('email').isEmail(),body('password').notEmpty(), async 
 
 router.post('/register',body('email').isEmail(),body('password').isLength({ min: 6, max: 16 }), async (req, res) => {
     try {
-        const errors = validationResult(req);
-        if(!errors.isEmpty()){
-            return res.status(400).json({
-                status:"Failed",
-                Error:errors.array(),
-                message:errors.array().filter((e)=>e.value.length<6&&e.param=="password").length?"password length should be 6 to 16 chars":""
-            })
-        }
+        // const errors = validationResult(req);
+        // if(!errors.isEmpty()){
+        //     return res.status(400).json({
+        //         status:"Failed",
+        //         Error:errors.array(),
+        //         message:errors.array().filter((e)=>e.value.length<6&&e.param=="password").length?"password length should be 6 to 16 chars":""
+        //     })
+        // }
+        console.log(req.body)
         const { email, password, confirmPassword } = req.body;
         let userData = await UserModel.findOne({ email });
         if (userData) {
             return res.status(409).json({
-                status: "Failed",
+                status: "Existed Email",
                 message: "User already exists with the given email. Pls proceed to signin"
             })
         }
