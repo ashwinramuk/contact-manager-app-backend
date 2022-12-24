@@ -41,8 +41,8 @@ router.post('/',uploads.single('file'), (req,res)=>{
 })
 router.get('/',async (req,res)=>{
     try {
-      const {PageNum=1 ,filter='name' } = req.query
-      const allcontact = await ContactModel.find({user:req.userID}).sort(filter).skip((11*(PageNum - 1))).limit(11); //0-11
+      const {filter='name' } = req.query
+      const allcontact = await ContactModel.find({user:req.userID}).sort(filter)  
       // console.log(allcontact)
       res.json({
           status: 'Success',  
